@@ -68,7 +68,7 @@ const AnimationConfig = {
 function getCanvasPoint(event, canvas) {
   const source = event.touches ? event.touches[0] : event;
   const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = deviceDPR();
   const logicalWidth = canvas.width / dpr;
   const logicalHeight = canvas.height / dpr;
   return new Point(

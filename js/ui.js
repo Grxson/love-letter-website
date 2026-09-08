@@ -86,7 +86,7 @@ function initContent(config) {
 function initCanvas(id) {
   const canvas = document.getElementById(id);
   const { width: w, height: h } = StageConfig;
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = deviceDPR();
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   canvas.style.width = w + "px";

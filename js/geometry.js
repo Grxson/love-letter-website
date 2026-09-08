@@ -10,6 +10,14 @@ function randomFloat(min, max) {
   return min + Math.random() * (max - min);
 }
 
+// Techo de resolución para canvases: en móviles el dpr llega a 3 y
+// clearRect + redibujado por frame se vuelven letárgicos.
+const MAX_DPR = 2;
+
+function deviceDPR() {
+  return Math.min(window.devicePixelRatio || 1, MAX_DPR);
+}
+
 function bezier(points, t) {
   const p0 = points[0];
   const p1 = points[1];
