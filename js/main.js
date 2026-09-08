@@ -11,6 +11,8 @@ function showLoveLetter() {
 // Main Initialization
 // ===========================
 
+const SEEN_KEY = "love-letter-seen";
+
 async function startApp() {
   initContent(CONFIG);
 
@@ -31,17 +33,29 @@ async function startApp() {
 
   scaleContent();
 
-  seed.draw();
+  const alreadySeen = localStorage.getItem(SEEN_KEY) === "1";
 
-  await waitForUserClick(seed, dynamicCanvas);
-  await animateSeedShrink(seed);
-  await animateSeedMove(seed, footer);
-  await animateTreeGrow(tree);
-  await animateFlowerBloom(tree);
-  tree.resetFallingBlooms();
+  if (alreadySeen) {
+    // Ya lo vio: render instantáneo del estado final (árbol crecido, corrido a la derecha, suelo completo).
+    while (tree.canGrow()) tree.grow();
+    while (tree.canFlower()) tree.flower(16);
+    tree.resetFallingBlooms();
+    footer.length = footer.width;
+    footer.draw();
+    staticCanvas.classList.add("shifted");
+  } else {
+    seed.draw();
+    await waitForUserClick(seed, dynamicCanvas);
+    await animateSeedShrink(seed);
+    await animateSeedMove(seed, footer);
+    await animateTreeGrow(tree);
+    await animateFlowerBloom(tree);
+    tree.resetFallingBlooms();
 
-  footer.draw();
-  await animateTreeMove(staticCanvas);
+    footer.draw();
+    await animateTreeMove(staticCanvas);
+    localStorage.setItem(SEEN_KEY, "1");
+  }
 
   showLoveLetter();
   startHeartJumpAnimation(tree);
