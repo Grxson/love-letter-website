@@ -1,59 +1,28 @@
 // ===========================
-// Clock Display
+// Romantic Quotes (rotating)
 // ===========================
 
-function createClockDOM(config) {
-  const clock = document.getElementById("clock");
-  const cfg = config.time;
-  const digits = {};
-  clock.textContent = "";
+function startQuotes(config) {
+  const box = document.getElementById("quote-box");
+  const text = document.getElementById("quote-text");
+  const quotes = config.quotes || [];
+  let index = 0;
 
-  function addText(text) {
-    clock.appendChild(document.createTextNode(text));
+  function show() {
+    text.textContent = quotes[index % quotes.length];
+    index++;
   }
 
-  function addDigit(key) {
-    const span = document.createElement("span");
-    span.className = "digit";
-    clock.appendChild(span);
-    digits[key] = span;
-    return span;
-  }
+  box.classList.add("quote-box--visible");
+  show();
 
-  addText(cfg.prefix);
-  addDigit("days");
-  addText(` ${cfg.day} `);
-  addDigit("hours");
-  addText(` ${cfg.hour} `);
-  addDigit("minutes");
-  addText(` ${cfg.minute} `);
-  addDigit("seconds");
-  addText(` ${cfg.second}`);
-
-  return digits;
-}
-
-function timeElapse(startMs, digits) {
-  const secondsPerMinute = 60;
-  const secondsPerHour = secondsPerMinute * 60;
-  const secondsPerDay = secondsPerHour * 24;
-
-  function twoDigits(value) {
-    return String(value).padStart(2, "0");
-  }
-
-  const totalSeconds = Math.floor((Date.now() - startMs) / 1000);
-  const todaySeconds = totalSeconds % secondsPerDay;
-  const days = Math.floor(totalSeconds / secondsPerDay);
-
-  const hours = Math.floor(todaySeconds / secondsPerHour);
-  const minutes = Math.floor((todaySeconds % secondsPerHour) / secondsPerMinute);
-  const seconds = todaySeconds % secondsPerMinute;
-
-  digits.days.textContent = String(days);
-  digits.hours.textContent = twoDigits(hours);
-  digits.minutes.textContent = twoDigits(minutes);
-  digits.seconds.textContent = twoDigits(seconds);
+  setInterval(() => {
+    box.classList.remove("quote-box--visible");
+    setTimeout(() => {
+      show();
+      box.classList.add("quote-box--visible");
+    }, 500);
+  }, config.quoteInterval || 4500);
 }
 
 // ===========================
@@ -63,6 +32,8 @@ function timeElapse(startMs, digits) {
 function scaleContent() {
   const viewport = document.getElementById("viewport");
   const main = document.getElementById("main");
+  const content = document.getElementById("content");
+  const isMobileLayout = () => window.innerWidth <= 600;
 
   function resize() {
     const scale = Math.min(
@@ -72,7 +43,13 @@ function scaleContent() {
     );
     viewport.style.width = `${StageConfig.width * scale}px`;
     viewport.style.height = `${StageConfig.height * scale}px`;
+    document.documentElement.style.setProperty("--hero-h", `${StageConfig.height * scale}px`);
     main.style.transform = `scale(${scale})`;
+    if (isMobileLayout()) {
+      content.style.transform = "";
+    } else {
+      content.style.transform = `scale(${scale})`;
+    }
   }
 
   resize();
@@ -95,29 +72,11 @@ function initContent(config) {
     });
   }
 
-  function createName(text) {
-    const span = document.createElement("span");
-    span.className = "name";
-    span.textContent = text;
-    return span;
-  }
-
-  const paragraphs = [
-    config.letter.paragraph1,
-    config.letter.paragraph2,
-    config.letter.paragraph3
-  ];
+  const paragraphs = Object.values(config.letter);
   paragraphs.forEach((lines, index) => {
     if (index > 0) letter.appendChild(document.createElement("br"));
     addParagraph(lines);
   });
-
-  const clockText = document.getElementById("clock-text");
-  clockText.textContent = "";
-  clockText.appendChild(createName(config.couple.name1));
-  clockText.appendChild(document.createTextNode(` ${config.couple.connector} `));
-  clockText.appendChild(createName(config.couple.name2));
-  clockText.appendChild(document.createTextNode(` ${config.couple.together}`));
 }
 
 // ===========================

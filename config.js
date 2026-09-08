@@ -1,40 +1,40 @@
 const CONFIG = {
-  couple: {
-    name1: "Ms.Wang",
-    name2: "Mr.Qi",
-    connector: "和",
-    together: "在一起"
-  },
-  memorialDate: "2017-12-25T00:00:00",
+  quoteInterval: 4500,
+quotes: [
+    "Tú y yo, juntos...",
+    "Te quiero más que ayer y menos que mañana.",
+    "Cada latido de mi corazón lleva tu nombre.",
+    "Eres mi lugar favorito en el mundo.",
+    "Contigo, el tiempo se detiene.",
+    "Amarte es lo mejor que me ha pasado.",
+    "Tu sonrisa ilumina hasta mi día más gris.",
+    "Eres mi hoy, mi mañana y mi siempre.",
+    "Si tuviera que elegir de nuevo, te elegiría otra vez.",
+    "Siempre tú, en cada vida."
+  ],
   letter: {
     paragraph1: [
-      "哪天我老了，还跟和你热恋一样，",
-      "桌前给你发消息，",
-      "灯盏微黄，窗外风雨千墙，",
-      "半天酿出一句我想你了，",
-      "内心的原野，",
-      "时而流星追月，时而万马奔腾。"
+      "Quiero amarte como aman los vampiros:",
+      "con hambre,",
+      "con miedo,",
+      "con eternidad."
     ],
     paragraph2: [
-      "有时有月亮，",
-      "我就做一个九曲十八弯的梦，",
-      "每个转角都与你有关，",
-      "你对我笑了一下，",
-      "醒来我就发上一天呆。"
+      "Quiero tus noches,",
+      "tu pulso debajo de mis labios,",
+      "el rojo secreto que guardas bajo la piel."
     ],
     paragraph3: [
-      "现在我在长满星星的夜里，",
-      "阶前红豆坠满枝，",
-      "醉过知酒浓，",
-      "无物抵相思。"
+      "Y si alguna vez me condenan",
+      "por desearte demasiado,",
+      "que lo hagan."
+    ],
+    paragraph4: [
+      "Prefiero mil años de oscuridad",
+      "si en todos ellos",
+      "puedo seguir encontrando tu cuello",
+      "a la luz de la luna."
     ]
   },
-  time: {
-    prefix: "第 ",
-    day: "天",
-    hour: "小时",
-    minute: "分钟",
-    second: "秒"
-  },
-  seedText: "Miss You"
+  seedText: "Tócame"
 };

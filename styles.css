@@ -2,10 +2,10 @@
    CSS Variables (Theme)
    =========================== */
 :root {
-  --bg-color: #ffe;
-  --text-color: #228567;
-  --name-color: #000;
-  --date-color: #808080;
+  --bg-color: #0d1226;
+  --text-color: #c3cdf0;
+  --name-color: #fff;
+  --date-color: #8b93ac;
   --stage-w: 1100px;
   --stage-h: 680px;
   --tree-shift-x: 260px;
@@ -80,6 +80,20 @@ body {
 }
 
 /* ===========================
+   Overlaid Content (letter + quote)
+   =========================== */
+#content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--stage-w);
+  height: var(--stage-h);
+  transform-origin: top left;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ===========================
    Love Letter Content
    =========================== */
 #letter {
@@ -92,6 +106,11 @@ body {
   font-size: 16px;
   color: var(--text-color);
   z-index: 3;
+  transform-origin: top left;
+}
+
+#letter p {
+  display: block;
 }
 
 .typewriter-cursor {
@@ -112,34 +131,69 @@ body {
 }
 
 /* ===========================
-   Time Counter Display
+   Romantic Quote Display
    =========================== */
-#clock-box {
+#quote-box {
   position: absolute;
   left: 60px;
-  top: 550px;
-  font-size: 28px;
+  top: 545px;
+  width: 470px;
+  font-size: 22px;
+  font-style: italic;
+  color: var(--text-color);
   opacity: 0;
   transition: opacity 0.5s;
   z-index: 3;
+  transform-origin: top left;
 }
 
-#clock-box.clock-box--visible {
+#quote-box.quote-box--visible {
   opacity: 1;
 }
 
-#clock-text {
-  color: var(--date-color);
+#quote-text {
+  line-height: 1.5;
 }
 
-#clock-text .name {
-  color: var(--name-color);
-}
+/* ===========================
+   Responsive (móvil)
+   =========================== */
+@media (max-width: 600px) {
+  body {
+    overflow-y: auto;
+  }
 
-#clock {
-  margin-left: 48px;
-}
+  /* El hero es el viewport (alto --hero-h); la carta vive en #content,
+     fuera del recorte. */
+  #viewport {
+    overflow: visible;
+    contain: none;
+  }
 
-#clock .digit {
-  font-size: 64px;
+  #content {
+    top: calc(var(--hero-h, 0px) + 16px);
+    left: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+  }
+
+  #letter {
+    position: static;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-size: 17px;
+  }
+
+  #quote-box {
+    position: static;
+    text-align: center;
+    max-width: 560px;
+    margin: 24px auto 48px;
+    padding: 0 20px;
+    font-size: 18px;
+  }
 }

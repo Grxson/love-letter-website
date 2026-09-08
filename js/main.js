@@ -1,19 +1,10 @@
 // ===========================
-// Show Letter & Start Clock
+// Show Letter
 // ===========================
 
 function showLoveLetter() {
   const letter = document.getElementById("letter");
-  const clockBox = document.getElementById("clock-box");
   typewriter(letter);
-  clockBox.classList.add("clock-box--visible");
-}
-
-function startClock(config) {
-  const startMs = new Date(config.memorialDate).getTime();
-  const digits = createClockDOM(config);
-  timeElapse(startMs, digits);
-  setInterval(() => timeElapse(startMs, digits), AnimationConfig.TIME_UPDATE_INTERVAL);
 }
 
 // ===========================
@@ -54,7 +45,7 @@ async function startApp() {
 
   showLoveLetter();
   startHeartJumpAnimation(tree);
-  startClock(CONFIG);
+  startQuotes(CONFIG);
 }
 
 document.addEventListener("DOMContentLoaded", startApp);

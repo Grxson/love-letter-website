@@ -8,11 +8,13 @@ const StageConfig = {
 };
 
 const TreeRenderConfig = {
-  radiusDecay: 0.97
+  radiusDecay: 0.97,
+  minSeedScale: 1,
+  seedScaleMultiplier: 1.5
 };
 
 const TreeShape = {
-  seed: { x: StageConfig.width / 2 - 20, color: "rgb(190, 26, 37)", scale: 2 },
+  seed: { x: StageConfig.width / 2 - 20, color: "rgb(255, 51, 92)", scale: 3.4 },
   branches: [
     {
       from: [535, 680],
@@ -78,8 +80,9 @@ class Seed {
   constructor(tree, point, scale = 1, color = "#FF0000", config = {}) {
     this.tree = tree;
     this.config = config;
-    this.heart = { point, scale, color, figure: new Heart() };
-    this.circle = { point: new Point(point.x, point.y), scale, color, radius: 5 };
+    const seedScale = scale * TreeRenderConfig.seedScaleMultiplier;
+    this.heart = { point, scale: seedScale, color, figure: new Heart() };
+    this.circle = { point: new Point(point.x, point.y), scale: seedScale, color, radius: 5 };
   }
 
   draw() {
@@ -88,20 +91,27 @@ class Seed {
   }
 
   canMove() { return this.circle.point.y < this.tree.height + 20; }
-  canScale() { return this.heart.scale > 0.2; }
+  canScale() { return this.heart.scale > TreeRenderConfig.minSeedScale; }
 
   move(x, y) {
     this.clear();
     this.drawCircle();
     const { point } = this.circle;
     point.set(point.x + x, point.y + y);
+    this.heart.point.set(point.x, point.y);
+    this.drawHeart();
+    this.drawText();
   }
 
   scale(s) {
     this.clear();
     this.drawCircle();
     this.drawHeart();
-    this.heart.scale *= s;
+    this.heart.scale = Math.max(
+      TreeRenderConfig.minSeedScale,
+      this.heart.scale * s
+    );
+    this.circle.scale = this.heart.scale;
   }
 
   drawHeart() {
@@ -145,8 +155,8 @@ class Seed {
     ctx.stroke();
     ctx.moveTo(0, 0);
     ctx.scale(0.75, 0.75);
-    ctx.font = '12px sans-serif';
-    ctx.fillText(text, 23, 10);
+    ctx.font = '14px sans-serif';
+    ctx.fillText(text, 22, 12);
     ctx.restore();
   }
 
@@ -158,9 +168,10 @@ class Seed {
   }
 
   hover(x, y) {
-    const dpr = window.devicePixelRatio || 1;
-    const pixel = this.tree.ctx.getImageData(x * dpr, y * dpr, 1, 1);
-    return pixel.data[3] === 255;
+    const dx = x - this.heart.point.x;
+    const dy = y - this.heart.point.y;
+    const hitRadius = Math.max(36, this.heart.scale * 22);
+    return dx * dx + dy * dy <= hitRadius * hitRadius;
   }
 }
 
@@ -182,7 +193,7 @@ class Footer {
     ctx = ctx || this.tree.groundCtx;
     const { point, height, length, width } = this;
     ctx.save();
-    ctx.strokeStyle = "rgb(35, 31, 32)";
+    ctx.strokeStyle = "rgb(140, 148, 175)";
     ctx.lineWidth = height;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -230,11 +241,11 @@ class Branch {
     const { ctx } = this.tree;
     const r = this.currentRadius();
     ctx.save();
-    ctx.strokeStyle = "rgb(35, 31, 32)";
+    ctx.strokeStyle = "rgb(140, 148, 175)";
     ctx.lineWidth = r * 2;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.shadowColor = "rgb(35, 31, 32)";
+    ctx.shadowColor = "rgb(140, 148, 175)";
     ctx.shadowBlur = 2;
     ctx.beginPath();
     ctx.moveTo(start.x, start.y);
