@@ -65,37 +65,7 @@ const AnimationConfig = {
 // Animation Phase Functions
 // ===========================
 
-function getCanvasPoint(event, canvas) {
-  const source = event.touches ? event.touches[0] : event;
-  const rect = canvas.getBoundingClientRect();
-  const dpr = deviceDPR();
-  const logicalWidth = canvas.width / dpr;
-  const logicalHeight = canvas.height / dpr;
-  return new Point(
-    (source.clientX - rect.left) * logicalWidth / rect.width,
-    (source.clientY - rect.top) * logicalHeight / rect.height
-  );
-}
-
-async function waitForUserClick(seed, canvas) {
-  return new Promise((resolve) => {
-    function handler(e) {
-      if (e.type === "touchstart") e.preventDefault();
-      const point = getCanvasPoint(e, canvas);
-      if (seed.hover(point.x, point.y)) {
-        document.getElementById("bgm").play().catch(() => {});
-        canvas.removeEventListener("click", handler);
-        canvas.removeEventListener("touchstart", handler);
-        resolve();
-      }
-    }
-
-    canvas.addEventListener("click", handler);
-    canvas.addEventListener("touchstart", handler, { passive: false });
-  });
-}
-
-function animateSeedShrink(seed) {
+async function animateSeedShrink(seed) {
   return runUntil(
     () => !seed.canScale(),
     () => seed.scale(AnimationConfig.SCALE_FACTOR),
