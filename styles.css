@@ -161,10 +161,18 @@ body {
 @media (max-width: 600px) {
   body {
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   /* El hero es el viewport (alto --hero-h); la carta vive en #content,
-     fuera del recorte. */
+     fuera del recorte. #main fuera del flujo: su layout de 1100px
+     empujaría el ancho del body y crearía scroll horizontal. */
+  #main {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
   #viewport {
     overflow: visible;
     contain: none;
